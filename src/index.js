@@ -19,6 +19,7 @@ const router = createBrowserRouter([
  { path:'/',element: <App/> , children:[
    {path:'/create-repo', element: <CreateRepo/>},
    {path:'/reposatories', element:<AllRepos/> ,loader: loadRepos},
+   {path:'/:repoName',element:<FilesAndFolders/>},
  ]}
 ])
 root.render(

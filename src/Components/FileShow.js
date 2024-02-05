@@ -6,8 +6,13 @@ const FileShow = ({ content,isOpen }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(content.download_url);
-
+        const response = await fetch(content.download_url,
+          // RESOLVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+          // {
+          //   headers:{ 
+          //     Authorization : `Bearer ${process.env.REACT_APP_ACCESS_TOKEN}`}
+          // });
+        )
         if (!response.ok) {
           throw new Error(`Failed to fetch file content: ${response.status} ${response.statusText}`);
         }

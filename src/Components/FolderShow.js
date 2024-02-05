@@ -10,7 +10,7 @@ export default function FolderShow({owner,repoName,path,branch}) {
 
   useEffect(() => {
     const fetchRepoContents = async () => {
-      const accessToken = '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'
+      const accessToken = process.env.REACT_APP_ACCESS_TOKEN 
       try {
       let url = `https://api.github.com/repos/${owner}/${repoName}/contents`;
       

@@ -5,12 +5,15 @@ import FileShow from './FileShow';
 import NestedFolders from './NestedFolders';
 import FolderShow from './FolderShow';
 import { getMouseEventOptions } from '@testing-library/user-event/dist/utils';
+import CommitHistory from './CommitHistory';
+import InitialPushinComands from './InitialPushinComands';
 
 
-export default function FilesAndFolders({owner,repoName,path}) {
+export default function FilesAndFolders({owner,repoName,path,repo}) {
 
   const [openFile,setOpenFile] = useState(null);
   const [openFolder,setFolder] = useState(null);
+  const [commits,setCommits] = useState(null);
   const [branches,setBranches] = useState([]);
 
   const [contents, setContents] = useState([]);
@@ -18,22 +21,26 @@ export default function FilesAndFolders({owner,repoName,path}) {
 
   // fetching reposatories data 
   useEffect(() => {
+   
     const fetchRepoContents = async () => {
-      const accessToken = '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'
+      const accessToken = process.env.REACT_APP_ACCESS_TOKEN 
       try {
       let url = `https://api.github.com/repos/${owner}/${repoName}/contents`;
-
+      
+      console.log('Length of Repo is',repo)
     
+      // https://api.github.com/repos/am1t0/Advance-backend/contents
       
       if(path!==null) url +=`/${path}`
 
-      url += `?ref=${selectedBranch}`;
+       url += `?ref=${selectedBranch}`;
 
         const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
+        console.log('url is ',url);
         if (!response.ok) {
           throw new Error('Failed to fetch repository contents');
         }
@@ -52,7 +59,7 @@ export default function FilesAndFolders({owner,repoName,path}) {
   // fetching branches data 
   useEffect(() => {
     const fetchRepoBranches = async () => {
-      const accessToken = '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';
+      const accessToken = process.env.REACT_APP_ACCESS_TOKEN ;
 
       try {
         const url = `https://api.github.com/repos/${owner}/${repoName}/branches`;
@@ -78,20 +85,43 @@ export default function FilesAndFolders({owner,repoName,path}) {
     fetchRepoBranches();
   }, [owner, repoName]);
 
+
+  const handleCommitShow=(repoName)=>{
+    if(commits===repoName) 
+       setCommits(null);
+     
+    else
+    setCommits(repoName);
+  }
+
   const handleBranchChange = (event) => {
     setSelectedBranch(event.target.value);
   };
   return (
-    <div> 
+    <div> {
+      contents.length!==0 &&
+      <div className="d-flex">
        <select value={selectedBranch} id="branchSelect" onChange={handleBranchChange}>
-       {branches.map((branch) => (
+       {
+       branches.map((branch) => (
           <option key={branch?.name} value={branch?.name}>
             {branch?.name}
           </option>
-        ))}
+        ))
+        }
        </select>  
+       <h6 className='mx-3' style={{color:'green'}}>{branches.length} branches</h6>
+       </div>
+       }
+       <div className="container">
+       <h6 className='mx-3' style={{color:'green'}} onClick={()=>handleCommitShow(repoName,owner,selectedBranch)}>commits</h6>
+       {
+        (commits===repoName)&& <CommitHistory repo={repoName} owner={owner}  branch={selectedBranch}/>
+       }
+       </div>
       <ul>
-        {contents.map((item) => (
+        { contents.length!==0?
+        contents.map((item) => (
           <li key={item.name}>
             {item.type === 'file' ? (
               <div className='d-flex'>
@@ -118,7 +148,9 @@ export default function FilesAndFolders({owner,repoName,path}) {
                </>
             )}
           </li>
-        ))}
+        ))
+      : <InitialPushinComands owner={owner} repoName={repoName}/>      // if the repo content is empty it has no files and folders
+      }
       </ul>
     </div>
   );

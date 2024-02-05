@@ -3,6 +3,7 @@ import RepoDetailAndFolders from './RepoDetailAndFolders'
 import { useLoaderData } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import FilesAndFolders from './FilesAndFolders';
+import InitialPushinComands from './InitialPushinComands';
 
 export default function AllRepos() {
   const [show,setShow] = useState(null);
@@ -35,12 +36,13 @@ export default function AllRepos() {
        <button onClick={()=>handleLinkShow(repo)}>Link</button>
        {
         (link===repo.name) && <h6>{`https://github.com/${repo.owner.login}/${repo.name}.git`}</h6>
-}
+       }
 
        </div>
        </div>
         {
-         (show===repo.name) && <FilesAndFolders repoName={repo.name} owner={repo.owner.login} path={null}/>
+        (show === repo.name) && ((repo.files && repo.files.length === 0) ? <InitialPushinComands /> : <FilesAndFolders repo= {repo} repoName={repo.name} owner={repo.owner.login} path={null} />)
+
         }   </>
      ))
     }
@@ -72,7 +74,7 @@ const fetchRepos = async (accessToken) => {
 };
 
 export const loadRepos = async () => {
-  const accessToken ='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';
+  const accessToken = process.env.REACT_APP_ACCESS_TOKEN;
   try {
     console.log(accessToken)
     
