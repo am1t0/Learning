@@ -35,7 +35,8 @@ export default function AllRepos() {
        <button onClick={()=>handleLinkShow(repo)}>Link</button>
        {
         (link===repo.name) && <h6>{`https://github.com/${repo.owner.login}/${repo.name}.git`}</h6>
-       }
+}
+
        </div>
        </div>
         {
