@@ -7,6 +7,7 @@ import FolderShow from './FolderShow';
 import { getMouseEventOptions } from '@testing-library/user-event/dist/utils';
 import CommitHistory from './CommitHistory';
 import InitialPushinComands from './InitialPushinComands';
+import Branches from './Branches';
 
 
 export default function FilesAndFolders({owner,repoName,path,repo}) {
@@ -27,7 +28,7 @@ export default function FilesAndFolders({owner,repoName,path,repo}) {
       try {
       let url = `https://api.github.com/repos/${owner}/${repoName}/contents`;
       
-      console.log('Length of Repo is',repo)
+      //console.log('Length of Repo is',repo)
     
       // https://api.github.com/repos/am1t0/Advance-backend/contents
       
@@ -40,13 +41,13 @@ export default function FilesAndFolders({owner,repoName,path,repo}) {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        console.log('url is ',url);
+        //console.log('url is ',url);
         if (!response.ok) {
           throw new Error('Failed to fetch repository contents');
         }
 
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         setContents(data);
       } catch (error) {
         console.error('Error fetching repository contents:', error.message);
@@ -63,7 +64,7 @@ export default function FilesAndFolders({owner,repoName,path,repo}) {
 
       try {
         const url = `https://api.github.com/repos/${owner}/${repoName}/branches`;
-
+  
         const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -76,7 +77,7 @@ export default function FilesAndFolders({owner,repoName,path,repo}) {
 
         const data = await response.json();
         setBranches(data);
-        console.log(data);
+        //console.log(data,data.object.sha);
       } catch (error) {
         console.error('Error fetching repository branches:', error.message);
       }
@@ -98,21 +99,8 @@ export default function FilesAndFolders({owner,repoName,path,repo}) {
     setSelectedBranch(event.target.value);
   };
   return (
-    <div> {
-      contents.length!==0 &&
-      <div className="d-flex">
-       <select value={selectedBranch} id="branchSelect" onChange={handleBranchChange}>
-       {
-       branches.map((branch) => (
-          <option key={branch?.name} value={branch?.name}>
-            {branch?.name}
-          </option>
-        ))
-        }
-       </select>  
-       <h6 className='mx-3' style={{color:'green'}}>{branches.length} branches</h6>
-       </div>
-       }
+    <div> 
+       <Branches contents={contents} branches={branches} handleBranchChange={handleBranchChange} selectedBranch={selectedBranch} owner={owner} repo={repoName}/>
        <div className="container">
        <h6 className='mx-3' style={{color:'green'}} onClick={()=>handleCommitShow(repoName,owner,selectedBranch)}>commits</h6>
        {
@@ -126,7 +114,7 @@ export default function FilesAndFolders({owner,repoName,path,repo}) {
             {item.type === 'file' ? (
               <div className='d-flex'>
               <p onClick={()=> {
-                console.log("Dabbbbbbbbbbaa!!")
+                //console.log("Dabbbbbbbbbbaa!!")
               if(openFile===item.name)
               setOpenFile(null)
             else

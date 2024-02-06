@@ -29,7 +29,7 @@ export default function FolderShow({owner,repoName,path,branch}) {
         }
 
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         setContents(data);
       } catch (error) {
         console.error('Error fetching repository contents:', error.message);
@@ -47,7 +47,7 @@ export default function FolderShow({owner,repoName,path,branch}) {
             {item.type === 'file' ? (
               <div className='d-flex'>
               <p onClick={()=> {
-                console.log("Dabbbbbbbbbbaa!!")
+                //console.log("Dabbbbbbbbbbaa!!")
               if(openFile===item.name)
               setOpenFile(null)
             else

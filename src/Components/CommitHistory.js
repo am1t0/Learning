@@ -23,7 +23,7 @@ const CommitHistory = ({ owner, repo, branch }) => {
         const data = await response.json();
         setCommits(data);
       } catch (error) {
-        console.error('Error fetching commits:', error.message);
+        // console.error('Error fetching commits:', error.message);
       }
     };
 

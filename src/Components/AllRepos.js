@@ -41,7 +41,7 @@ export default function AllRepos() {
        </div>
        </div>
         {
-        (show === repo.name) && ((repo.files && repo.files.length === 0) ? <InitialPushinComands /> : <FilesAndFolders repo= {repo} repoName={repo.name} owner={repo.owner.login} path={null} />)
+        (show === repo.name) && <FilesAndFolders repo= {repo} repoName={repo.name} owner={repo.owner.login} path={null} />
 
         }   </>
      ))
@@ -68,7 +68,7 @@ const fetchRepos = async (accessToken) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching repositories:', error.message);
+    // console.error('Error fetching repositories:', error.message);
     throw error; // Propagate the error to handle it where the function is called
   }
 };
@@ -76,13 +76,13 @@ const fetchRepos = async (accessToken) => {
 export const loadRepos = async () => {
   const accessToken = process.env.REACT_APP_ACCESS_TOKEN;
   try {
-    console.log(accessToken)
+    // console.log(accessToken)
     
     const repos = await fetchRepos(accessToken);
 
     return repos;
   } catch (error) {
-    console.error('Error loading repositories:', error.message);
+    // console.error('Error loading repositories:', error.message);
     throw error; // Propagate the error to handle it where the function is called
   }
 };

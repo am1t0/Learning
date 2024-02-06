@@ -28,7 +28,7 @@ export default function CreateRepo() {
  
      if (response.ok) {
        alert(`Repository "${repoName}" created successfully!`);
-       console.log('Repository Details:', data);
+       //console.log('Repository Details:', data);
       
      } else {
        alert(`Error creating repository: ${data.message}`);
